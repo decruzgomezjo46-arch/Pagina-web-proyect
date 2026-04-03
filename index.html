@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Historia del Amor</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-brand">Amor Eterno</div>
+        <ul class="nav-links">
+            <li><a href="#inicio" class="active" onclick="switchTab('inicio')">Inicio</a></li>
+            <li><a href="#historia" onclick="switchTab('historia')">Nuestra Historia</a></li>
+            <li><a href="#galeria" onclick="switchTab('galeria')">Galería</a></li>
+            <li><button class="nav-btn" onclick="openModal()"><i class="fa-solid fa-plus"></i> Nuevo Recuerdo</button></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content wrapper to handle tabs -->
+    <main id="main-content">
+        <!-- Inicio Tab -->
+        <section id="tab-inicio" class="tab-pane active">
+            <header class="hero">
+                <div class="hero-overlay"></div>
+                <div class="hero-content fade-in-up">
+                    <h1 class="hero-title">Nuestra Historia de Amor</h1>
+                    <p class="hero-subtitle">Un viaje de momentos inolvidables</p>
+                    <button class="btn-primary" onclick="switchTab('historia')">Empezar el Viaje</button>
+                </div>
+            </header>
+        </section>
+
+        <!-- Historia Tab -->
+        <section id="tab-historia" class="tab-pane">
+            <div class="section-container">
+                <h2 class="section-title">Línea del Tiempo</h2>
+                <div class="timeline" id="timeline-container">
+                    <!-- Las historias se inyectarán aquí por JavaScript -->
+                    <div class="timeline-empty-state" id="empty-timeline">
+                        <i class="fa-solid fa-heart-crack"></i>
+                        <p>Aún no hay recuerdos añadidos. ¡Sube su primer recuerdo!</p>
+                        <button class="btn-primary mt-4" onclick="openModal()">Añadir Historia</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Galeria Tab -->
+        <section id="tab-galeria" class="tab-pane">
+            <div class="section-container">
+                <h2 class="section-title">Nuestros Momentos</h2>
+                <div class="gallery-grid" id="gallery-container">
+                    <!-- Las fotos se inyectarán aquí -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal para Añadir Recuerdo -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3 class="modal-title">Guardar un Nuevo Recuerdo</h3>
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="tipoRecuerdo">¿Qué deseas agregar?</label>
+                    <select id="tipoRecuerdo" onchange="toggleFormFields()">
+                        <option value="ambos">Historia con Foto</option>
+                        <option value="historia">Solo Historia (Texto)</option>
+                        <option value="foto">Solo Foto (Galería)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="group-titulo">
+                    <label for="titulo">Título de la memoria</label>
+                    <input type="text" id="titulo" placeholder="Ej: Nuestro primer viaje" required>
+                </div>
+                
+                <div class="form-group" id="group-fecha">
+                    <label for="fecha">Fecha del recuerdo</label>
+                    <input type="date" id="fecha" required>
+                </div>
+                
+                <div class="form-group" id="group-descripcion">
+                    <label for="descripcion">Cuenten la historia...</label>
+                    <textarea id="descripcion" rows="4" placeholder="Escribe aquí los detalles de este momento especial..." required></textarea>
+                </div>
+                
+                <div class="form-group" id="group-foto">
+                    <label for="fotoUpload" class="custom-file-upload">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Seleccionar Fotografía
+                    </label>
+                    <input type="file" id="fotoUpload" accept="image/*" onchange="previewImage(event)">
+                    <div class="image-preview" id="imagePreviewContainer" style="display:none;">
+                        <img id="imagePreviewImg" src="" alt="Previsualización">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-submit">Guardar para siempre <i class="fa-solid fa-heart"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
