@@ -38,20 +38,29 @@ const START_DATE = new Date("2024-10-02T00:00:00");
 
 function updateCounter() {
     const now = new Date();
-    const diff = now - START_DATE;
 
-    // Cálculo de tiempo
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    let years = now.getFullYear() - START_DATE.getFullYear();
+    let months = now.getMonth() - START_DATE.getMonth();
+    let days = now.getDate() - START_DATE.getDate();
 
-    // Convertir a años, meses, días para ser más romántico (Aproximado)
-    const years = Math.floor(days / 365);
-    const months = Math.floor((days % 365) / 30);
-    const remainingDays = Math.floor((days % 365) % 30);
+    // Ajustar si aún no hemos llegado al día en este mes
+    if (days < 0) {
+        months--;
+        // Obtener la cantidad de días del mes anterior
+        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += prevMonth.getDate();
+    }
+
+    // Ajustar si aún no hemos llegado al mes en este año
+    if (months < 0) {
+        years--;
+        months += 12;
+    }
 
     let text = "";
     if (years > 0) text += `${years} año${years > 1 ? 's' : ''}, `;
     if (months > 0) text += `${months} mes${months > 1 ? 'es' : ''} y `;
-    text += `${remainingDays} día${remainingDays !== 1 ? 's' : ''}`;
+    text += `${days} día${days !== 1 ? 's' : ''}`;
 
     const counterEl = document.getElementById('time-together');
     if (counterEl) counterEl.innerText = `Llevamos ${text} juntos`;
@@ -271,7 +280,7 @@ function setupDragAndDrop() {
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             if (!file.type.startsWith('image/')) continue;
-            
+
             try {
                 const compressedBase64 = await resizeAndCompressImage(file);
                 currentPhotosArray.push(compressedBase64);
@@ -286,13 +295,13 @@ function setupDragAndDrop() {
 function renderMiniatures() {
     const container = document.getElementById('imagePreviewContainer');
     container.innerHTML = '';
-    
+
     if (currentPhotosArray.length === 0) {
         container.style.display = 'none';
         document.getElementById('dragDropArea').style.display = 'block';
         return;
     }
-    
+
     currentPhotosArray.forEach((b64, index) => {
         const div = document.createElement('div');
         div.className = 'mini-preview';
@@ -304,7 +313,7 @@ function renderMiniatures() {
     });
 }
 
-window.removeMiniature = function(index) {
+window.removeMiniature = function (index) {
     currentPhotosArray.splice(index, 1);
     renderMiniatures();
 }
@@ -312,9 +321,9 @@ window.removeMiniature = function(index) {
 function resizeAndCompressImage(file, maxWidth = 1200) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = function(event) {
+        reader.onload = function (event) {
             const img = new Image();
-            img.onload = function() {
+            img.onload = function () {
                 const canvas = document.createElement('canvas');
                 let width = img.width;
                 let height = img.height;
@@ -615,12 +624,12 @@ function renderData(dataToRender) {
             let currentIndex = 0;
             setInterval(() => {
                 images[currentIndex].classList.remove('active');
-                if(indicators[currentIndex]) indicators[currentIndex].classList.remove('active');
-                
+                if (indicators[currentIndex]) indicators[currentIndex].classList.remove('active');
+
                 currentIndex = (currentIndex + 1) % images.length;
-                
+
                 images[currentIndex].classList.add('active');
-                if(indicators[currentIndex]) indicators[currentIndex].classList.add('active');
+                if (indicators[currentIndex]) indicators[currentIndex].classList.add('active');
             }, 3500); // 3.5 Segundos por slide
         }
     });
@@ -674,17 +683,17 @@ function createFloatingHearts() {
 // ==========================================
 // 🔔 NOTIFICACIONES TOAST
 // ==========================================
-window.showToast = function(message) {
+window.showToast = function (message) {
     const container = document.getElementById('toast-container');
     if (!container) return;
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.innerHTML = `<i class="fa-solid fa-heart" style="color: var(--primary-color);"></i> <span>${message}</span>`;
     container.appendChild(toast);
-    
+
     // Animar entrada
     setTimeout(() => toast.classList.add('show'), 10);
-    
+
     // Animar salida
     setTimeout(() => {
         toast.classList.remove('show');
